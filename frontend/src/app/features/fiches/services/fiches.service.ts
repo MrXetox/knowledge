@@ -135,7 +135,7 @@ export class FichesService {
           cards.map(card => card.id === id ? { ...card, views: card.views + 1 } : card)
         )),
         catchError(err => {
-          this.toast_service.error(err.error.message || 'Erreur lors de la récupération de la fiche');
+          this.toast_service.error(err?.error?.message || 'Erreur lors de la récupération de la fiche');
           return EMPTY;
         })
       )
@@ -151,7 +151,7 @@ export class FichesService {
       .pipe(
         tap(() => this.categories_service.refresh()),
         catchError(err => {
-          this.toast_service.error(err.error.message || 'Erreur lors de la création de la fiche');
+          this.toast_service.error(err?.error?.message || 'Erreur lors de la création de la fiche');
           return EMPTY;
         })
       );
@@ -183,7 +183,7 @@ export class FichesService {
         )),
         tap(() => this.categories_service.refresh()),
         catchError(err => {
-          this.toast_service.error(err.error.message || 'Erreur lors de la mise à jour de la fiche');
+          this.toast_service.error(err?.error?.message || 'Erreur lors de la mise à jour de la fiche');
           return EMPTY;
         })
       )
@@ -200,7 +200,7 @@ export class FichesService {
         tap(() => this.cache.update(fiches => fiches.filter(fiche => fiche.id !== id))),
         tap(() => this.categories_service.refresh()),
         catchError(err => {
-          this.toast_service.error(err.error.message || 'Erreur lors de la suppression de la fiche');
+          this.toast_service.error(err?.error?.message || 'Erreur lors de la suppression de la fiche');
           return EMPTY;
         })
       )

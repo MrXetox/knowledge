@@ -15,7 +15,8 @@
         title="Gras"
         type="button"
         ngToolbarWidget
-        [value]="edit.isActive('bold')"
+        value="bold"
+        [attr.aria-pressed]="edit.isActive('bold')"
         [class]="edit.isActive('bold') ? 'bg-border-default' : 'border border-transparent hover:border-border-default'"
         (click)="edit.chain().focus().toggleBold().run()"
       >
@@ -27,7 +28,8 @@
         title="Italique"
         type="button"
         ngToolbarWidget
-        [value]="edit.isActive('italic')"
+        value="italic"
+        [attr.aria-pressed]="edit.isActive('italic')"
         [class]="edit.isActive('italic') ? 'bg-border-default' : 'border border-transparent hover:border-border-default'"
         (click)="edit.chain().focus().toggleItalic().run()"
       >
@@ -39,7 +41,8 @@
         title="Souligné"
         type="button"
         ngToolbarWidget
-        [value]="edit.isActive('underline')"
+        value="underline"
+        [attr.aria-pressed]="edit.isActive('underline')"
         [class]="edit.isActive('underline') ? 'bg-border-default' : 'border border-transparent hover:border-border-default'"
         (click)="edit.chain().focus().toggleUnderline().run()"
       >
@@ -51,7 +54,8 @@
         title="Bloc de code"
         type="button"
         ngToolbarWidget
-        [value]="edit.isActive('codeblock')"
+        value="codeBlock"
+        [attr.aria-pressed]="edit.isActive('codeBlock')"
         [class]="edit.isActive('codeBlock') ? 'bg-border-default' : 'border border-transparent hover:border-border-default'"
         (click)="edit.chain().focus().toggleCodeBlock().run()"
       >

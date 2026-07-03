@@ -106,7 +106,7 @@ export class CategoriesService {
     this.http.post(this.API_URL, payload)
       .pipe(
         catchError(err => {
-          this.toast_service.error(err.error.message || 'Erreur lors de la création de la catégorie');
+          this.toast_service.error(err?.error?.message || 'Erreur lors de la création de la catégorie');
           return EMPTY;
         })
       )
@@ -123,7 +123,7 @@ export class CategoriesService {
     this.http.patch(this.API_URL + '/' + id, payload)
       .pipe(
         catchError(err => {
-          this.toast_service.error(err.error.message || 'Erreur lors de la mise à jour de la catégorie');
+          this.toast_service.error(err?.error?.message || 'Erreur lors de la mise à jour de la catégorie');
           return EMPTY;
         })
       )
@@ -139,7 +139,7 @@ export class CategoriesService {
      this.http.delete(this.API_URL + '/' + id)
        .pipe(
          catchError(err => {
-           this.toast_service.error(err.error.message || 'Erreur lors de la suppression de la catégorie');
+           this.toast_service.error(err?.error?.message || 'Erreur lors de la suppression de la catégorie');
            return EMPTY;
          })
        )
