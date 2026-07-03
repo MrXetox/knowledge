@@ -1,0 +1,27 @@
+<div class="relative flex h-screen overflow-hidden">
+  <app-sidebar
+    class="w-64 h-full"
+    [title]="title"
+    [subtitle]="subtitle"
+  />
+  <main class="flex-1 overflow-hidden">
+    <router-outlet/>
+  </main>
+  <div
+    class="fixed top-0 bottom-0 right-0 flex flex-col items-end gap-3 w-fit max-w-sm p-4 pointers-events-none z-50"
+  >
+    @for (toast of toasts(); track toast.id) {
+      <app-toast
+        [id]="toast.id"
+      />
+    }
+  </div>
+  @if (snake()) {
+    <iframe
+      class="absolute top-1/2 left-1/2 -translate-1/2 w-full h-full max-w-125 max-h-125 z-50 overflow-hidden"
+      src="https://google-snake-free.github.io/google-snake"
+      title="Snake Game"
+      (blur)="snake.set(false)"
+    ></iframe>
+  }
+</div>

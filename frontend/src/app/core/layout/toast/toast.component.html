@@ -1,0 +1,21 @@
+<div
+  class="backdrop-blur-md border-2 flex gap-3 items-center p-4 rounded-lg toast-enter w-fit"
+  role="alert"
+  [class]="style().colors + (is_closing() ? ' toast-exit' : '')"
+  (animationend)="onAnimationEnd()"
+>
+  <div
+    class="flex items-center justify-center shrink-0 text-3xl w-8 h-8"
+  >
+    <ng-icon
+      aria-hidden="true"
+      class="shrink-0"
+      [name]="style().icon"
+    />
+  </div>
+  <span
+    class="text-sm"
+  >
+    {{ toast().message }}
+  </span>
+</div>

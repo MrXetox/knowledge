@@ -1,0 +1,13 @@
+<app-dialog
+  message="Veuillez choisir une catégorie pour désarchiver la fiche."
+  confirm_label="Désarchiver"
+  [confirm]="onConfirmed"
+>
+  <section
+    class="px-6 py-4.5"
+  >
+    <app-categories-input
+      [formField]="form"
+    />
+  </section>
+</app-dialog>

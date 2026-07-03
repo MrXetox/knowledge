@@ -1,0 +1,58 @@
+<div
+  class="flex items-center gap-2.5 p-2 pl-11 pr-4"
+>
+  <div
+    aria-label="{{ subcategory().name }}"
+    class="w-1.5 h-1.5 bg-border-strong rounded-full cursor-grab active:cursor-grabbing!"
+    cdkDragHandle
+    [cdkDragHandleDisabled]="is_editing()"
+  ></div>
+  @if (!is_editing()) {
+    <div
+      class="flex-1 flex items-center justify-center gap-2"
+    >
+      <span
+        class="flex items-center justify-center w-4 h-4 border rounded-md"
+        [class]="CategoryColors[subcategory().special]"
+      ></span>
+      <span
+        class="text-sm truncate"
+      >
+          {{ subcategory().name }}
+        </span>
+    </div>
+    <div
+      class="flex gap-2"
+    >
+      <button
+        aria-label="Modifier la catégorie"
+        class="flex items-center justify-center w-7 h-7 bg-bg-surface border border-border-default  rounded-md cursor-pointer"
+      >
+        <ng-icon
+          aria-hidden="true"
+          class="text-xs"
+          name="lucidePencil"
+          (click)="onEdit()"
+        />
+      </button>
+      <button
+        aria-label="Supprimer la catégorie"
+        class="flex items-center justify-center w-7 h-7 bg-danger-subtle border border-danger-border text-danger-strong rounded-md cursor-pointer"
+      >
+        <ng-icon
+          aria-hidden="true"
+          class="text-xs"
+          name="lucideTrash2"
+          (click)="onDelete()"
+        />
+      </button>
+    </div>
+  } @else {
+    <app-category-input
+      class="w-full"
+      variant="subcategory"
+      [category]="subcategory()"
+      (finish)="onEdited($event)"
+    />
+  }
+</div>

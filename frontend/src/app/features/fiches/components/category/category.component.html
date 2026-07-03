@@ -1,0 +1,43 @@
+<button
+  aria-controls="category-dropdown-{{ uid }}"
+  class="inline-flex items-center gap-1 max-w-full px-1 py-0.5 border text-xs font-bold rounded-md uppercase"
+  type="button"
+  cdkOverlayOrigin
+  #trigger="cdkOverlayOrigin"
+  [attr.aria-expanded]="is_dropdown_open()"
+  [class]="CategoryColors[categories()[0].color]"
+  (mouseenter)="onHover()"
+  (mouseleave)="onLeave()"
+>
+  <ng-icon
+    aria-hidden="true"
+    class="text-center shrink-0"
+    [name]="categories()[0].icon"
+  />
+  <span
+    class="truncate"
+  >
+    {{ categories()[0].name }} {{ (categories().length - 1) | i18nPlural: { '=0': '', '=1': '+1', 'other': '+#' } }}
+  </span>
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="is_dropdown_open()"
+>
+  <div
+    class="flex flex-col gap-1.5 p-2 bg-bg-surface border border-border-subtle rounded-md shadow-md shadow-overlay-light dropdown_animation"
+    id="category-dropdown-{{ uid }}"
+    role="list"
+  >
+    @for (category of categories(); track category.id) {
+      <app-category
+        role="listitem"
+        [categories_ids]="[category.id]"
+      />
+    }
+  </div>
+</ng-template>
+
+

@@ -1,0 +1,41 @@
+@if (is_loading()) {
+  <div
+    aria-label="Chargement en cours"
+    class="flex items-center justify-center h-24"
+    role="status"
+  >
+    <ng-icon
+      aria-hidden="true"
+      class="text-3xl animate-spin"
+      name="lucideLoader2"
+    />
+  </div>
+} @else {
+  <div
+    class="relative inline-block bg-gray-50 border border-gray-200 rounded-md cursor-zoom-in"
+    (click)="onZoomIn()"
+  >
+    <img
+      class="rounded-md"
+      [alt]="alt()"
+      [height]="height()"
+      [ngSrc]="src()"
+      [width]="width()"
+    />
+  </div>
+}
+
+ @if (is_zoomed()) {
+   <div
+     class="fixed inset-0 flex items-center justify-center bg-black/80 cursor-zoom-out z-50"
+     (click)="onZoomOut()"
+   >
+     <img
+       class="rounded-md w-auto h-auto max-w-full max-h-[90vh]"
+       [alt]="alt()"
+       [height]="height()"
+       [ngSrc]="src()"
+       [width]="width()"
+     >
+   </div>
+ }

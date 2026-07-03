@@ -1,0 +1,124 @@
+@import 'highlight.js/styles/github-dark.css';
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+
+@theme {
+  /*
+  ====================
+  1. FONDS ET NEUTRES
+  ====================
+  */
+  --color-bg-base: oklch(0.9678 0.0017 247.84);
+  --color-bg-surface: oklch(1 0 0);
+  --color-bg-muted: oklch(0.967 0.0029 264.54);
+  --color-bg-inset: oklch(0.9846 0.0017 247.84);
+  --color-bg-alt: oklch(0.9876 0.0017 247.84);
+  --color-bg-stripe: oklch(0.9842 0.0034 247.86);
+
+  --color-border-subtle: oklch(0.9683 0.0069 247.9);
+  --color-border-default: oklch(0.9276 0.0058 264.53);
+  --color-border-strong: oklch(0.8717 0.0093 258.34);
+
+  /*
+  ==========
+  2. TEXTES
+  ==========
+  */
+  --color-text-heading: oklch(0.2293 0.009 255.6);
+  --color-text-default: oklch(0.3729 0.0306 259.73);
+  --color-text-muted: oklch(0.4461 0.0263 256.8);
+  --color-text-subtle: oklch(0.551 0.0234 264.36);
+  --color-text-ghost: oklch(0.7137 0.0192 261.32);
+
+  /*
+  ===========================
+  3. COULEUR PRIMAIRE (Bleu)
+  ===========================
+  */
+  --color-primary-subtle: oklch(0.9705 0.0142 254.6);
+  --color-primary-muted: oklch(0.9319 0.0316 255.59);
+  --color-primary-border: oklch(0.8823 0.0571 254.13);
+  --color-primary-base: oklch(0.6231 0.188 259.81);
+  --color-primary-strong: oklch(0.4882 0.2172 264.38);
+
+  /*
+  ========================
+  4. COULEURS SÉMANTIQUES
+  ========================
+  */
+
+  /* Accent */
+  --color-accent-subtle: oklch(0.9619 0.0179 272.31);
+  --color-accent-muted: oklch(0.9885 0.0054 274.97);
+  --color-accent-soft: oklch(0.8971 0.0395 277.12);
+  --color-accent-border: oklch(0.8699 0.0622 274.04);
+  --color-accent-border-strong: oklch(0.7850 0.1150 277.12);
+  --color-accent-base: oklch(0.5854 0.2041 277.12);
+  --color-accent-strong: oklch(0.5106 0.2301 276.97);
+  --color-accent-deep: oklch(0.4568 0.2146 277.02);
+  --color-accent-heavy: oklch(0.3984 0.1773 277.37);
+
+  /* Succès */
+  --color-success-subtle: oklch(0.9819 0.0181 155.83);
+  --color-success-border: oklch(0.925 0.0806 155.99);
+  --color-success-focus: oklch(0.8712 0.1363 154.45);
+  --color-success-base: oklch(0.7227 0.192 149.58);
+  --color-success-strong: oklch(0.448 0.108 151.328);
+
+  /* Warning */
+  --color-warning-subtle: oklch(0.9869 0.0214 95.28);
+  --color-warning-muted: oklch(0.9619 0.058 95.62);
+  --color-warning-border: oklch(0.9243 0.1151 95.75);
+  --color-warning-focus: oklch(0.7686 0.1647 70.08);
+  --color-warning-strong: oklch(0.5553 0.1455 49);
+
+  /* Danger */
+  --color-danger-subtle: oklch(0.9705 0.0129 17.38);
+  --color-danger-border: oklch(0.9356 0.0309 17.72);
+  --color-danger-focus: oklch(0.8077 0.1035 19.57);
+  --color-danger-base: oklch(0.6368 0.2078 25.33);
+  --color-danger-strong: oklch(0.5771 0.2152 27.33);
+  --color-danger-heavy: oklch(0.4437 0.1613 26.9);
+
+  /*
+  ========================
+  5. DIVERS
+  ========================
+  */
+
+  --color-overlay-light: oklch(0 0 0 / 4%);
+
+  --color-gradient-start: oklch(0.3462 0.0736 256.04);
+  --color-gradient-end: oklch(0.5461 0.2152 262.88);
+
+  /*
+  ========================
+  5. FONTS
+  ========================
+  */
+  --font-sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+  background: var(--color-bg-base);
+  color: var(--color-text-heading);
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::placeholder {
+  color: var(--color-text-ghost);
+  opacity: 1;
+}
+
+/* Preview et placeholder du drag'n'drop */
+
+.cdk-drag-preview {
+  @apply bg-accent-subtle border border-accent-border-strong rounded-lg overflow-hidden;
+}
+
+.cdk-drag-placeholder {
+  @apply p-2 mx-2 border border-dashed border-accent-border-strong rounded-lg;
+}

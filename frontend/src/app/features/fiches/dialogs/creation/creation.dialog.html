@@ -1,0 +1,238 @@
+<app-dialog
+  title="Fiche"
+  message="Documentez un problème et sa solution."
+  [confirm]="onConfirmed"
+>
+  <section
+    class="flex items-center px-6 py-4.5 border-b border-border-default"
+  >
+    <app-filedropzone-input
+      accept=".zip"
+      class="w-full bg-accent-subtle border-accent-border text-accent-strong"
+      placeholder="Importer une fiche"
+      (files)="processFiche($event)"
+    />
+  </section>
+  <section
+    class="flex-1 flex flex-col gap-6 min-h-0 px-6 pb-4 text-center overflow-y-auto"
+  >
+    <div>
+      <label
+        class="block mb-2.5 text-xs font-semibold text-text-default uppercase tracking-wider"
+      >
+        Titre
+      </label>
+      <input
+        class="w-full px-3.5 py-2.5 bg-bg-inset border text-sm rounded-md"
+        placeholder="Ex: VPN - Connexion impossible depuis la dernière MAJ"
+        [class.border-border-default]="!showError(form.title)"
+        [class.border-danger-base]="showError(form.title)"
+        [formField]="form.title"
+      />
+      @if (showError(form.title)) {
+        <p class="mt-1 text-xs text-danger-base text-left">
+          {{ form.title().errors()[0]?.message }}
+        </p>
+      }
+    </div>
+    <div>
+      <label
+        class="block mb-2.5 text-xs font-semibold text-text-default uppercase tracking-wider"
+      >
+        Catégorie
+      </label>
+      <app-categories-input
+        [formField]="form.categories"
+      />
+      @if (showError(form.categories)) {
+        <p class="mt-1 text-xs text-danger-base text-left">
+          {{ form.categories().errors()[0]?.message }}
+        </p>
+      }
+    </div>
+    <div>
+      <label
+        class="block mb-2.5 text-xs font-semibold text-danger-strong uppercase tracking-wider"
+      >
+        Problème / Question
+      </label>
+      <app-editor
+        [formField]="form.problem"
+      />
+      @if (showError(form.problem)) {
+        <p class="mt-1 text-xs text-danger-base text-left">
+          {{ form.problem().errors()[0]?.message }}
+        </p>
+      }
+    </div>
+    <div>
+      <label
+        class="block mb-2.5 text-xs font-semibold text-primary-strong uppercase tracking-wider"
+      >
+        Étapes de résolution
+      </label>
+      <div
+        cdkDropListGroup
+      >
+        <div
+          class="flex flex-col gap-2"
+          role="group"
+          cdkDropList
+          (cdkDropListDropped)="onStepDrop($event)"
+        >
+          @for (step of form.steps; track $index; let i = $index) {
+            <div
+              class="flex flex-col gap-1.5"
+              cdkDrag
+            >
+              <div
+                class="flex items-start gap-2"
+              >
+                <span
+                  aria-hidden="true"
+                  class="flex items-center justify-center w-6 h-6 mt-2 bg-primary-strong text-xs font-bold text-bg-surface rounded-full shrink-0 cursor-grab active:cursor-grabbing!"
+                  cdkDragHandle
+                >
+                  {{ i + 1 }}
+                </span>
+                <div
+                  class="flex-1"
+                >
+                  <app-step-input
+                    [formField]="step"
+                    [placeholder]="'Étape ' + (i + 1)"
+                  />
+                  @if (showError(step.text)) {
+                    <p class="mt-1 text-xs text-danger-base text-left">
+                      {{ step.text().errors()[0]?.message }}
+                    </p>
+                  }
+                </div>
+                <div
+                  class="flex gap-2 mt-2"
+                >
+                  <button
+                    aria-label="Créer une sous-catégorie"
+                    class="flex items-center justify-center w-7 h-7 bg-primary-subtle border border-primary-border text-primary-strong rounded-md cursor-pointer"
+                    (click)="onSubstepAdd(i)"
+                  >
+                    <ng-icon
+                      aria-hidden="true"
+                      class="text-xs"
+                      name="lucidePlus"
+                    />
+                  </button>
+                  <button
+                    aria-label="Supprimer l'étape {{ i + 1 }}"
+                    class="flex items-center justify-center w-7 h-7 bg-danger-subtle border border-danger-border text-danger-strong rounded-md cursor-pointer"
+                    (click)="onStepRemove(i)"
+                  >
+                    <ng-icon
+                      aria-hidden="true"
+                      class="text-xs"
+                      name="lucideTrash2"
+                    />
+                  </button>
+                </div>
+              </div>
+              <div
+                class="flex flex-col gap-3 ml-8"
+                role="region"
+                cdkDropList
+              >
+                @for (substep of step.substeps; track $index; let j = $index) {
+                  <div
+                    class="flex items-start gap-2 cursor-grab active:cursor-grabbing!"
+                    role="listitem"
+                    cdkDrag
+                  >
+                    <span
+                      aria-hidden="true"
+                      class="flex items-center justify-center min-w-7.5 h-6 mt-2 bg-primary-subtle border border-primary-muted text-[11px] font-semibold text-primary-base rounded-md shrink-0 cursor-grab active:cursor-grabbing!"
+                      cdkDragHandle
+                    >
+                      {{ i + 1 }} . {{ j + 1 }}
+                    </span>
+                    <div
+                      class="flex-1"
+                    >
+                      <app-step-input
+                        [formField]="substep"
+                        [placeholder]="'Sous-étape ' + (i + 1) + '.' + (j + 1)"
+                      />
+                      @if (showError(substep.text)) {
+                        <p class="mt-1 text-xs text-danger-base text-left">
+                          {{ substep.text().errors()[0]?.message }}
+                        </p>
+                      }
+                    </div>
+                    <button
+                      aria-label="Supprimer l'étape {{ i + 1 }}"
+                      class="flex items-center justify-center w-7 h-7 mt-2 bg-danger-subtle border border-danger-border text-danger-strong rounded-md cursor-pointer"
+                      (click)="onSubstepRemove(i, j)"
+                    >
+                      <ng-icon
+                        aria-hidden="true"
+                        class="text-xs"
+                        name="lucideTrash2"
+                      />
+                    </button>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+          <button
+            class="flex items-center justify-center gap-1.5 py-2 bg-accent-muted border border-dashed border-accent-border text-accent-strong text-xs font-semibold rounded-md cursor-pointer"
+            (click)="onStepAdd()"
+          >
+            <ng-icon
+              aria-hidden="true"
+              class="text-base"
+              name="lucidePlus"
+            />
+            Ajouter une étape
+          </button>
+        </div>
+      </div>
+      @if (showError(form.steps)) {
+        <p class="mt-1 text-xs text-danger-base text-left">
+          {{ form.steps().errors()[0]?.message }}
+        </p>
+      }
+    </div>
+    <div>
+      <label
+        class="block mb-2.5 text-xs font-semibold text-warning-strong uppercase tracking-wider"
+      >
+        Notes
+        <span
+          class="text-xs text-text-subtle normal-case"
+        >(optionnel)</span>
+      </label>
+      <app-editor
+        [formField]="form.notes"
+      />
+      @if (showError(form.notes)) {
+        <p class="mt-1 text-xs text-danger-base text-left">
+          {{ form.notes().errors()[0]?.message }}
+        </p>
+      }
+    </div>
+    <div>
+      <label
+        class="block mb-2.5 text-xs font-semibold text-text-default uppercase tracking-wider"
+      >
+        Mots-clés
+      </label>
+      <app-tags-input
+        [formField]="form.tags"
+      />
+      @if (showError(form.tags)) {
+        <p class="mt-1 text-xs text-danger-base text-left">
+          {{ form.tags().errors()[0]?.message }}
+        </p>
+      }
+    </div>
+  </section>
+</app-dialog>

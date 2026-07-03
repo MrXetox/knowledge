@@ -1,0 +1,72 @@
+<div
+  class="flex flex-col w-full h-full"
+>
+  <header
+    class="flex items-center justify-between px-6 py-3.5 bg-bg-surface border-b border-border-default"
+  >
+    <app-searchbar
+      class="flex-1 max-w-md"
+    />
+    <p
+      aria-live="polite"
+      aria-atomic="true"
+      class="text-xs"
+    >
+      <span class="font-bold">{{ cards().length }}</span>
+      {{ cards().length | i18nPlural: { '=0': 'fiche', '=1': 'fiche', 'other': 'fiches' } }}
+    </p>
+  </header>
+  <section
+    class="flex-1 flex w-full min-h-0"
+  >
+    <div
+      class="flex-1 flex flex-col gap-2 p-4 overflow-y-auto"
+      role="list"
+      (scroll)="onScrollEnd($event)"
+    >
+      @for (card of cards(); track $index) {
+        <app-card
+          role="listitem"
+          [card]="card"
+        />
+      }
+      @if (isLoading()) {
+        <div
+          aria-label="Chargement en cours"
+          class="flex items-center justify-center h-full"
+          role="status"
+        >
+          <ng-icon
+            aria-hidden="true"
+            class="text-3xl animate-spin"
+            name="lucideLoader2"
+          />
+        </div>
+      } @else if (error()) {
+        <div
+          class="flex items-center justify-center h-full"
+          role="alert"
+        >
+          <p
+            class="text-2xl font-bold"
+          >
+            Oups, une erreur est survenue !</p>
+        </div>
+      }
+    </div>
+    @if (size() > 0) {
+      <app-resize
+        [(size)]="size"
+      />
+    }
+    <aside
+      class="h-full shrink-0"
+      [style.width.px]="size()"
+    >
+      <router-outlet
+        (activate)="onActivated()"
+        (deactivate)="onDeactivated()"
+      />
+    </aside>
+  </section>
+</div>

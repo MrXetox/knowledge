@@ -1,0 +1,18 @@
+<button
+  aria-label="Redimensionner le panneau"
+  class="relative flex items-center justify-center w-4 h-full -ml-2 -mr-2 cursor-col-resize"
+  type="button"
+  (mousedown)="onMouseDown($event)"
+>
+  <div
+    class="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-px bg-border-default"
+  ></div>
+  <div
+    class="relative flex items-center justify-center w-3.5 h-12 bg-bg-surface border border-border-default rounded-full"
+  >
+    <div class="flex gap-[1.5px]">
+      <div class="w-px h-3 bg-text-heading"></div>
+      <div class="w-px h-3 bg-text-heading"></div>
+    </div>
+  </div>
+</button>

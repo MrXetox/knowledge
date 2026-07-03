@@ -1,0 +1,47 @@
+<div
+  class="flex flex-col w-full h-full max-h-[90dvh] bg-bg-surface rounded-xl shadow-lg shadow-overlay-light overflow-hidden"
+  (keydown.escape)="(cancel())()"
+>
+  <header
+    class="px-6 py-4.5"
+  >
+    <h2
+      class="text-lg font-semibold"
+      id="dialog-title"
+    >
+      {{ title() }}
+    </h2>
+    <p
+      class="mt-1 text-sm text-text-subtle"
+      id="dialog-desc"
+    >
+      {{ message() }}
+    </p>
+  </header>
+  <section
+    class="flex-1 flex flex-col gap-4 min-h-0 border-y border-border-default text-center overflow-y-auto empty:hidden"
+  >
+    <ng-content></ng-content>
+  </section>
+  <section
+    class="flex items-center justify-end gap-3 px-6 py-4.5"
+  >
+    <button
+      class="px-4 py-2 bg-bg-surface border border-border-default text-sm font-semibold rounded-md cursor-pointer"
+      type="button"
+      (click)="(cancel())()"
+    >
+      Annuler
+    </button>
+    <button
+      class="px-4 py-2 border text-sm font-semibold rounded-md cursor-pointer"
+      type="button"
+      [class]="role() === 'danger'
+            ? 'bg-danger-subtle  border-danger-border text-danger-strong'
+            : 'bg-primary-subtle border-primary-border text-primary-strong'"
+      (click)="(confirm())()"
+    >
+      {{ confirm_label() }}
+    </button>
+  </section>
+</div>

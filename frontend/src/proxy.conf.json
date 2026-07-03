@@ -1,0 +1,15 @@
+{
+  "/api": {
+    "target": "http://localhost:8000",
+    "secure": false,
+    "changeOrigin": false,
+    "pathRewrite": {
+      "^/api": ""
+    }
+  },
+  "/uploads": {
+    "target": "http://localhost:8000",
+    "secure": false,
+    "changeOrigin": false
+  }
+}

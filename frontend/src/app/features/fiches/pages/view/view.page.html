@@ -1,0 +1,219 @@
+<div
+  class="h-full px-8 pt-6 pb-16 bg-bg-surface overflow-x-hidden overflow-y-auto"
+>
+  <header
+    class="mb-6"
+  >
+    <p
+      class="flex flex-wrap items-center justify-center gap-2 text-xs text-text-subtle"
+    >
+      <app-category
+        [categories_ids]="fiche().categories"
+      />
+      <span
+        aria-hidden="true"
+        class="text-border-strong"
+      >|</span>
+      {{ fiche().history[0].date | date }}
+      <span
+        aria-hidden="true"
+        class="text-border-strong"
+      >|</span>
+      {{ fiche().views | compact }} {{ fiche().views | i18nPlural: { '=0': 'consultation', '=1': 'consultation', 'other': 'consultations' } }}
+    </p>
+    <h1
+      class="mt-2 text-xl font-bold text-text-heading text-center tracking-tight"
+    >
+      {{ fiche().title }}
+    </h1>
+  </header>
+  <section
+    class="mb-6"
+  >
+    <h2
+      class="mb-2 text-[11px] font-bold text-danger-strong text-center uppercase tracking-wide"
+    >
+      Problème
+    </h2>
+    <app-viewer
+      class="block p-3 bg-danger-subtle border border-danger-border rounded-md"
+      [content]="fiche().problem"
+    />
+  </section>
+  @if (fiche().steps.length !== 0) {
+    <section
+      class="mb-6"
+    >
+      <h2
+        class="mb-2 text-[11px] font-bold text-primary-strong text-center uppercase tracking-wide"
+      >
+        Étapes de résolution
+      </h2>
+      <div
+        class="flex flex-col gap-2"
+        role="list"
+      >
+        @for (step of fiche().steps; track $index; let i = $index) {
+          <div
+            class="flex items-start justify-between gap-2 p-3 border border-border-subtle rounded-md"
+            role="listitem"
+            [class.bg-bg-stripe]="i % 2 == 0"
+          >
+            <span
+              class="flex items-center justify-center w-6 h-6 bg-primary-strong text-xs font-bold text-bg-surface rounded-full shrink-0"
+            >
+              {{ i + 1 }}
+            </span>
+            <div
+              class="flex-1"
+            >
+              <app-viewer
+                [content]="step.text"
+              />
+              @if (step.image) {
+                <app-image
+                  class="mt-2"
+                  [src]="step.image"
+                  [alt]="'Image étape ' + ( i + 1 )"
+                />
+              }
+              @if (step.substeps && step.substeps.length > 0) {
+                <div
+                  class="flex flex-col gap-1 mt-2"
+                  role="list"
+                >
+                  @for (substep of step.substeps; track $index; let j = $index) {
+                    <div
+                      class="flex items-center gap-2"
+                      role="listitem"
+                    >
+                      <span
+                        class="flex items-center justify-center w-7 h-5 bg-primary-subtle border border-primary-border text-xs font-semibold text-primary-base rounded-md shrink-0"
+                      >
+                        {{ i + 1 }} . {{ j + 1 }}
+                      </span>
+                      <app-viewer
+                        class="flex-1"
+                        [content]="substep.text"
+                      />
+                    </div>
+                    @if (substep.image) {
+                      <app-image
+                        class="mt-2"
+                        [src]="substep.image"
+                        [alt]="'Image sous-étape ' + ( i + 1 ) + '.' + ( j + 1 )"
+                      />
+                    }
+                  }
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </section>
+  }
+  @if (!isFieldEmpty(fiche().notes)) {
+    <section
+      class="mb-6"
+    >
+      <h2
+        class="mb-2 text-[11px] font-bold text-warning-strong text-center uppercase tracking-wide"
+      >
+        Notes
+      </h2>
+      <app-viewer
+        class="block p-3 bg-warning-subtle border border-warning-border rounded-md"
+        [content]="fiche().notes"
+      />
+    </section>
+  }
+  <section
+    class="mb-6"
+  >
+    <h2
+      class="mb-2 text-[11px] font-bold text-text-subtle text-center uppercase tracking-wide"
+    >
+      Mots-clés
+    </h2>
+    <div
+      class="flex flex-wrap gap-2"
+    >
+      @for (tag of fiche().tags; track $index) {
+        <span
+          class="px-2 py-1 bg-bg-muted border border-border-default text-[11px] font-medium text-text-subtle rounded-md"
+        >
+          {{ tag }}
+        </span>
+      }
+    </div>
+  </section>
+  <section
+    class="mb-6"
+  >
+    <button
+      class="inline-flex items-center gap-2 text-xs font-semibold text-text-subtle cursor-pointer"
+      type="button"
+      (click)="onClick()"
+    >
+      <ng-icon
+        class="text-base"
+        [name]="is_history_open() ? 'lucideChevronDown' : 'lucideChevronRight'"
+      />
+      Historique
+      <span
+        class="px-1.5 py-px bg-bg-muted text-[10px] text-text-ghost rounded-md"
+      >
+        {{ fiche().history.length }} {{ fiche().history.length | i18nPlural: {'=0': 'version', '=1': 'version', 'other': 'versions'} }}
+      </span>
+    </button>
+    @if (is_history_open()) {
+      <div
+        class="mt-2"
+      >
+        <div
+          class="relative"
+        >
+          <div class="absolute top-2 bottom-2 left-1.5 w-0.5 bg-border-default rounded-full"></div>
+          @for (history of fiche().history; track history.id) {
+            <app-history
+              [history]="history"
+            />
+          }
+        </div>
+      </div>
+    }
+  </section>
+  <section
+    class="flex flex-wrap justify-center gap-2.5 p-5 border-t border-border-default"
+  >
+    @if (!fiche().archived) {
+      <button
+        class="px-4 py-2 bg-bg-surface border border-border-default text-xs font-semibold rounded-md cursor-pointer"
+        (click)="onEdit()"
+      >
+        Modifier
+      </button>
+    }
+    <button
+      class="px-4 py-2 bg-success-subtle border border-success-border text-xs font-semibold text-success-strong rounded-md cursor-pointer"
+      (click)="onDownload()"
+    >
+      Télécharger
+    </button>
+    <button
+      class="px-4 py-2 bg-accent-muted border border-accent-border text-xs font-semibold text-accent-strong rounded-md cursor-pointer"
+      (click)="onArchive()"
+    >
+      {{ fiche().archived ? 'Désarchiver' : 'Archiver' }}
+    </button>
+    @if (fiche().archived) {
+      <button
+        class="px-4 py-2 bg-danger-subtle border border-danger-border text-xs font-semibold text-danger-strong rounded-md cursor-pointer"
+        (click)="onDelete()"
+      >
+        Supprimer
+      </button>
+    }
+  </section>
+</div>

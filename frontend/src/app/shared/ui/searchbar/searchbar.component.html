@@ -1,0 +1,17 @@
+<div
+  class="relative"
+>
+  <ng-icon
+    aria-hidden="true"
+    class="absolute top-1/2 left-2 -translate-y-1/2 text-xl"
+    name="lucideSearch"
+  />
+  <input
+    aria-label="Rechercher une fiche"
+    class="w-full pl-9 py-2 bg-bg-inset border border-border-strong text-xs rounded-md shadow shadow-overlay-light"
+    placeholder="Rechercher par mots-clés..."
+    type="text"
+    [value]="initial_value"
+    (input)="onChange($event)"
+  />
+</div>

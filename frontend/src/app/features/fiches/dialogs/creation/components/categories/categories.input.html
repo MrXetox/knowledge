@@ -1,0 +1,94 @@
+<button
+  class="flex items-center justify-between w-full px-3.5 py-2.5 bg-bg-inset border text-sm text-left rounded-md cursor-pointer"
+  type="button"
+  [class.border-border-default]="!touched() || !invalid()"
+  [class.border-danger-base]="touched() && invalid()"
+  (click)="onDropdownClick()"
+>
+  <div
+    class="flex-1 flex flex-wrap items-center gap-1.5"
+  >
+    @if (value().length < 1) {
+      <span
+        class="text-text-ghost"
+      >
+        Sélectionner une ou plusieurs catégories
+      </span>
+    } @else {
+      @for (category_id of value(); track category_id) {
+        <button
+          class="cursor-pointer"
+          type="button"
+          (click)="onSubcategoryClick(category_id); $event.stopPropagation();"
+        >
+          <app-category
+            [categories_ids]="[category_id]"
+          />
+          ×
+        </button>
+      }
+    }
+  </div>
+  <ng-icon
+    class="text-base"
+    [name]="is_dropdown_open() ? 'lucideChevronDown' : 'lucideChevronLeft'"
+  />
+</button>
+
+<ng-template
+  cdkConnectedOverlay
+  cdkConnectedOverlayBackdropClass="=cdk-overlay-transparent-backdrop"
+  [cdkConnectedOverlayOrigin]="this"
+  [cdkConnectedOverlayOpen]="is_dropdown_open()"
+  [cdkConnectedOverlayWidth]="this.elementRef.nativeElement.offsetWidth"
+  [cdkConnectedOverlayOffsetY]="4"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  (backdropClick)="onDropdownClick()"
+>
+  <div
+    class="w-full h-full max-h-64 bg-bg-surface border border-border-default rounded-md shadow-lg overflow-y-auto"
+  >
+    @for (category of tree(); track category.id) {
+      <button
+        type="button"
+        class="flex items-center justify-between w-full h-full px-2.5 py-1.75 text-sm font-semibold cursor-pointer"
+        (click)="onCategoryClick(category.id)"
+      >
+        <span
+          class="flex items-center gap-1.5"
+        >
+          <ng-icon
+            class="text-base"
+            [name]="category.special"
+          />
+          {{ category.name }}
+        </span>
+        <ng-icon
+          class="text-base"
+          [name]="categories_open().includes(category.id) ? 'lucideChevronDown' : 'lucideChevronLeft'"
+        />
+      </button>
+      @if (categories_open().includes(category.id)) {
+        <div
+          class="flex flex-col gap-4 px-4 py-1.75"
+        >
+          @for (subcategory of category.children; track subcategory.id) {
+            <button
+              type="button"
+              class="flex items-center justify-between w-full h-full px-2.5 text-sm font-semibold cursor-pointer"
+              (click)="onSubcategoryClick(subcategory.id)"
+            >
+              <app-category
+                [categories_ids]="[subcategory.id]"
+              />
+              <ng-icon
+                class="text-base"
+                [name]="value().includes(subcategory.id) ? 'lucideCheck' : 'lucidePlus'"
+              />
+            </button>
+          }
+        </div>
+      }
+    }
+  </div>
+</ng-template>

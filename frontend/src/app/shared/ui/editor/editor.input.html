@@ -1,0 +1,82 @@
+<div
+  class="w-full bg-bg-inset border border-border-default text-sm rounded-md"
+  [class.border-border-default]="!touched() || !invalid() "
+  [class.border-danger-base]="touched() && invalid()"
+>
+  @if (editor(); as edit) {
+    <div
+      aria-label="Mise en forme du texte"
+      class="flex items-center justify-center gap-1 p-1 bg-bg-surface text-sm rounded-t-lg"
+      ngToolbar
+    >
+      <button
+        aria-label="Gras"
+        class="w-7 h-7 text-sm rounded-md leading-none cursor-pointer"
+        title="Gras"
+        type="button"
+        ngToolbarWidget
+        [value]="edit.isActive('bold')"
+        [class]="edit.isActive('bold') ? 'bg-border-default' : 'border border-transparent hover:border-border-default'"
+        (click)="edit.chain().focus().toggleBold().run()"
+      >
+        <b aria-hidden="true">G</b>
+      </button>
+      <button
+        aria-label="Italique"
+        class="w-7 h-7 text-sm rounded-md leading-none cursor-pointer"
+        title="Italique"
+        type="button"
+        ngToolbarWidget
+        [value]="edit.isActive('italic')"
+        [class]="edit.isActive('italic') ? 'bg-border-default' : 'border border-transparent hover:border-border-default'"
+        (click)="edit.chain().focus().toggleItalic().run()"
+      >
+        <i aria-hidden="true">I</i>
+      </button>
+      <button
+        aria-label="Souligné"
+        class="w-7 h-7 text-sm rounded-md leading-none cursor-pointer"
+        title="Souligné"
+        type="button"
+        ngToolbarWidget
+        [value]="edit.isActive('underline')"
+        [class]="edit.isActive('underline') ? 'bg-border-default' : 'border border-transparent hover:border-border-default'"
+        (click)="edit.chain().focus().toggleUnderline().run()"
+      >
+        <u aria-hidden="true">U</u>
+      </button>
+      <button
+        aria-label="Bloc de code"
+        class="w-7 h-7 text-sm rounded-md leading-none cursor-pointer"
+        title="Bloc de code"
+        type="button"
+        ngToolbarWidget
+        [value]="edit.isActive('codeblock')"
+        [class]="edit.isActive('codeBlock') ? 'bg-border-default' : 'border border-transparent hover:border-border-default'"
+        (click)="edit.chain().focus().toggleCodeBlock().run()"
+      >
+        <span aria-hidden="true">&#123;&nbsp;&#125;</span>
+      </button>
+      @if (codeblock()) {
+        <select
+          aria-label="Langage du bloc de code"
+          class="h-7 text-sm rounded-md border border-border-default bg-bg-inset px-1 cursor-pointer"
+          title="Langage du bloc de code"
+          [value]="codelanguage()"
+          (change)="onCodeLanguageSet($any($event.target).value)"
+        >
+          @for (lang of languages; track lang.value) {
+            <option
+              [value]="lang.value"
+            >
+              {{ lang.label }}
+            </option>
+          }
+        </select>
+      }
+    </div>
+  }
+  <tiptap-editor
+    [editor]="editor()"
+  ></tiptap-editor>
+</div>

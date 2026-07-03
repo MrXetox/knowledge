@@ -1,0 +1,54 @@
+<a
+  aria-label="Voir la fiche {{ card().title }}"
+  class="flex gap-3 w-full min-w-24 p-3 bg-bg-surface hover:bg-primary-subtle border border-border-default text-left rounded-md transition-colors cursor-pointer"
+  type="button"
+  queryParamsHandling="preserve"
+  routerLinkActive="bg-primary-subtle border-primary-border"
+  ariaCurrentWhenActive="page"
+  [routerLink]="['/fiches', card().id]"
+>
+  @if (variant() == 'ranking') {
+    <span
+      class="flex items-center justify-center w-8 h-8 mt-2 border text-sm font-bold rounded-md"
+      [class]="rank_class()"
+    >
+     {{ rank() }}
+    </span>
+  }
+  <div
+    class="flex-1 min-w-0"
+  >
+    <app-category
+      class="block pb-1"
+      [categories_ids]="card().categories"
+    />
+    <h2
+      class="mb-2 text-sm font-semibold leading-tight"
+    >
+      {{ card().title }}
+    </h2>
+    <div
+      class="flex flex-wrap items-center justify-between gap-2"
+    >
+      @if (variant() == 'full') {
+        <div
+          class="flex flex-wrap gap-1"
+        >
+          @for (tag of card().tags; track $index) {
+            <span
+              class="px-1.5 py-0.5 text-[10px] font-medium text-text-subtle bg-bg-muted rounded-sm whitespace-nowrap"
+            >
+              {{ tag }}
+            </span>
+          }
+        </div>
+      }
+      <div
+        class="flex flex-wrap items-center gap-2 text-xs text-text-ghost"
+      >
+        {{ card().views | compact }} {{ card().views | i18nPlural: { '=0': 'consultation', '=1': 'consultation', 'other': 'consultations' } }} -
+        <span>{{ card().last_modified | date }}</span>
+      </div>
+    </div>
+  </div>
+</a>

@@ -1,0 +1,131 @@
+<div
+  class="flex items-center gap-2"
+>
+  <div
+    class="flex items-center gap-2 w-16 p-2 bg-bg-inset border border-border-default rounded-md cursor-pointer"
+    ngCombobox
+    #combobox="ngCombobox"
+    [(expanded)]="is_dropdown_open"
+    [preserveContent]="true"
+    [attr.aria-label]="variant() === 'category'
+      ? 'Choisir une icône pour la catégorie'
+      : 'Choisir une couleur pour la sous-catégorie'"
+    [attr.aria-invalid]="showError(form.special) || null"
+    [attr.aria-errormessage]="showError(form.special) ? 'special-error-' + uid : null"
+    [class.border-border-strong]="!showError(form.special)"
+    [class.border-danger-base]="showError(form.special)"
+  >
+    <ng-icon
+      aria-hidden="true"
+      [name]="is_dropdown_open() ? 'lucideChevronDown' : 'lucideChevronRight'"
+    />
+    @if (form.special().value() !== '') {
+      @if (variant() == 'category') {
+        <ng-icon
+          aria-hidden="true"
+          [name]="form.special().value()"
+        />
+      } @else {
+        <span
+          class="flex items-center justify-center w-4 h-4 border rounded-md"
+          [class]="CategoryColors[form.special().value()]"
+        ></span>
+      }
+    }
+  </div>
+  <div
+    class="flex flex-col w-full"
+  >
+    <input
+      class="w-full p-2  bg-bg-inset border text-sm rounded-md shadow shadow-overlay-light"
+      type="text"
+      [attr.aria-label]="variant() === 'category' ? 'Nom de la catégorie' : 'Nom de la sous-catégorie'"
+      [attr.aria-invalid]="showError(form.name) || null"
+      [attr.aria-errormessage]="showError(form.name) ? 'name-error-' + uid : null"
+      [class]="variant_config()['input']"
+      [class.border-border-strong]="!showError(form.name)"
+      [class.border-danger-base]="showError(form.name)"
+      [placeholder]="variant_config()['placeholder']"
+      [formField]="form.name"
+    />
+    @if (showError(form.name)) {
+      <p
+        class="mt-1 text-xs text-danger-base text-left"
+        id="name-error-{{ uid }}"
+      >
+        {{ form.name().errors()[0]?.message }}
+      </p>
+    }
+  </div>
+  <button
+    class="p-2 bg-primary-strong text-sm font-semibold text-bg-surface rounded-md cursor-pointer"
+    [class]="variant_config()['add']"
+    (click)="onSubmit()"
+  >
+    Enregistrer
+  </button>
+  <button
+    class="p-2 bg-bg-surface border border-border-default text-sm font-semibold text-text-muted rounded-md cursor-pointer"
+    [class]="variant_config()['cancel']"
+    (click)="onCancel()"
+  >
+    Annuler
+  </button>
+</div>
+
+@if (showError(form.special)) {
+  <p
+    class="mt-1 text-xs text-danger-base text-left"
+    id="special-error-{{ uid }}"
+  >
+    {{ form.special().errors()[0]?.message }}
+  </p>
+}
+
+<ng-template
+  [cdkConnectedOverlay]="{ origin: combobox.element, usePopover: 'inline', matchWidth: false }"
+  [cdkConnectedOverlayOpen]="is_dropdown_open()"
+>
+  <ng-template
+    ngComboboxPopup
+    [combobox]="combobox"
+  >
+    <div
+      class="mt-2 w-max grid grid-cols-10 gap-1 max-h-64 p-2 bg-bg-surface border border-border-default shadow-xl shadow-overlay-light rounded-md overflow-y-auto"
+      ngComboboxWidget
+      ngListbox
+      #listbox="ngListbox"
+      focusMode="activedescendant"
+      selectionMode="explicit"
+      [attr.aria-label]="variant() === 'category' ? 'Choisir une icône' : 'Choisir une couleur'"
+      [tabindex]="-1"
+      [activeDescendant]="listbox.activeDescendant()"
+      [(value)]="selected_special"
+      (click)="onSpecialCommit()"
+      (keydown.enter)="onSpecialCommit()"
+      (keydown.space)="onSpecialCommit()"
+    >
+      @for (special of specials_list(); track special) {
+        <div
+          aria-label="{{ variant() === 'category' ? 'Icône' : 'Couleur' }} {{ special }}"
+          class="flex items-center justify-center p-2 rounded-md cursor-pointer hover:bg-bg-muted aria-selected:bg-bg-muted data-[active=true]:ring-2"
+          ngOption
+          [value]="special"
+        >
+          @if (variant() == 'category') {
+            <ng-icon
+              aria-hidden="true"
+              class="text-xl"
+              [name]="special"
+            />
+          } @else {
+            <span
+              class="w-4 h-4 border rounded-md"
+              [class]="CategoryColors[special]"
+            ></span>
+          }
+        </div>
+      }
+    </div>
+  </ng-template>
+</ng-template>

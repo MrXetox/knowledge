@@ -1,0 +1,151 @@
+<div
+  class="flex gap-3 mb-3 text-center"
+>
+  <div
+    class="w-4 h-4 -ml-px border-2 border-bg-surface ring-2 rounded-full shrink-0 z-0"
+    [class]="type().dot"
+  ></div>
+  <div
+    class="flex-1"
+  >
+    <div
+      class="flex flew-wrap items-center gap-2 mb-1 text-xs font-semibold"
+    >
+      <span
+        class="px-2 py-1 border text-[10px] font-semibold rounded-sm uppercase tracking-wider"
+        [class]="type().badge"
+      >
+        {{ type().label }}
+      </span>
+      {{ history().author }}
+      <span class="text-xs font-normal">
+        {{ history().date | date }}
+      </span>
+    </div>
+    <p
+      class="text-xs text-center"
+    >
+      {{ history().summary }}
+    </p>
+    @if (history().type === 'edit') {
+      <button
+        class="mt-1.5 text-xs font-semibold text-primary-strong cursor-pointer"
+        (click)="onDetailsView()"
+      >
+        {{ is_details_open() ? 'Cacher les détails' : 'Voir les détails' }}
+      </button>
+    }
+    @if (is_details_open()) {
+      @for (detail of history().changes; track detail.field) {
+        <div
+          class="px-3.5 py-2.5 mt-2 bg-bg-inset border border-border-default rounded-lg"
+        >
+          <div
+            class="mb-2 text-[11px] font-semibold text-text-subtle uppercase tracking-wider"
+          >
+            {{ fields_details[detail.field] || detail.field }}
+          </div>
+
+          <div
+            class="px-3 py-2.5 bg-white border border-border-default rounded-[5px] text-xs leading-relaxed whitespace-pre-wrap"
+          >
+            @switch (detail.field) {
+              @case ('title') {
+                <div
+                  class="inline-flex justify-center gap-0.5"
+                >
+                  @for (part of getWordsDiff(detail.old_value, detail.new_value); track $index) {
+                    <span
+                      class="px-1 border rounded-md"
+                      [class]="getDiffClass(part)"
+                    >{{ part.value.trim() }}</span>
+                  }
+                </div>
+              }
+
+              @case ('categories') {
+                <div
+                  class="inline-flex flex-wrap gap-1"
+                >
+                  @for (part of getArrayDiff(detail.old_value, detail.new_value); track $index) {
+                    <span
+                      class="inline-flex gap-1 p-1 border rounded-md"
+                      [class]="getDiffClass(part)"
+                    >
+                      @for (category_id of part.value; track $index) {
+                        <app-category [categories_ids]="[category_id]"/>
+                      }
+                    </span>
+                  }
+                </div>
+              }
+
+              @case ('steps') {
+                <ul class="pl-4 list-disc space-y-1">
+                  @for (part of getStepsDiff(detail.old_value, detail.new_value); track $index) {
+                    @for (step of part.value; track $index) {
+                      <div
+                        class="flex items-center gap-2 p-1"
+                        [class]="getDiffClass(part)"
+                        [class.ml-9]="step.is_substep"
+                      >
+                        <span
+                          class="flex items-center justify-center w-7 h-5 bg-primary-subtle border border-primary-border text-xs font-semibold text-primary-base rounded-md shrink-0"
+                        >
+                          {{ step.index }}
+                        </span>
+                        <span
+                          class="text-[13px] text-text-muted mt-0.5 text-left"
+                        >
+                          {{ step.text }}
+                          @if (step.image) {
+                            @if (part.removed) {
+                              <span>(Suppression de l'image associée)</span>
+                            } @else if (part.added) {
+                              <span>(Ajout d'une image associée)</span>
+                            }
+                          }
+                        </span>
+                      </div>
+                    }
+                  }
+                </ul>
+              }
+
+              @case ('tags') {
+                <span
+                  class="inline-flex flex-wrap gap-1"
+                >
+                  @for (part of getArrayDiff(detail.old_value, detail.new_value); track $index) {
+                    @for (value of part.value; track $index) {
+                      <span
+                        class="px-2 py-1 bg-bg-muted border text-[11px] font-medium rounded-md"
+                        [class]="getDiffClass(part)"
+                      >
+                        {{ value }}
+                      </span>
+                    }
+                  }
+                </span>
+              }
+
+              @default {
+                <div
+                  class="flex flex-col justify-center gap-2"
+                >
+                  @for (part of getTiptapDiff(detail.old_value, detail.new_value); track $index) {
+                    <app-viewer
+                      class="block p-3 text-left rounded-md"
+                      [class]="getDiffClass(part)"
+                      [content]="part.value"
+                    ></app-viewer>
+                  }
+                </div>
+              }
+            }
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>

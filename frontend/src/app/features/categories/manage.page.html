@@ -1,0 +1,83 @@
+<main
+  class="flex flex-col gap-8 h-full p-8 overflow-y-auto"
+>
+  <header
+    class="text-center"
+  >
+    <h2
+      class="text-2xl font-bold tracking-tight"
+    >
+      Gestion des catégories
+    </h2>
+    <p
+      class="mt-1 text-sm text-text-subtle"
+    >
+      Organisez l'arborescence de votre base de connaissances.
+    </p>
+  </header>
+  @if (isLoading() && !tree()) {
+    <div
+      aria-label="Chargement en cours"
+      class="flex items-center justify-center h-full"
+      role="status"
+    >
+      <ng-icon
+        aria-hidden="true"
+        class="text-3xl animate-spin"
+        name="lucideLoader2"
+      />
+    </div>
+  } @else if (error()) {
+    <div
+      class="flex items-center justify-center h-full"
+      role="alert"
+    >
+      <p
+        class="text-2xl font-bold"
+      >
+        Oups, une erreur est survenue !</p>
+    </div>
+  } @else if (tree(); as tree) {
+    <section
+      cdkDropList
+      (cdkDropListDropped)="onCategoryMove($event)"
+    >
+      <div
+        class="flex flex-col gap-4"
+        cdkDropListGroup
+        ngAccordionGroup
+        [multiExpandable]="true"
+      >
+        @for (category of tree; track category.id) {
+          <app-category
+            cdkDrag
+            [category]="category"
+            [cdkDragData]="category"
+          />
+        }
+        @if (!is_creating()) {
+          <button
+            class="flex items-center justify-center gap-1.5 w-full p-3 bg-accent-muted border border-dashed border-accent-border text-sm font-semibold text-accent-strong cursor-pointer"
+            type="button"
+            (click)="onCreate()"
+          >
+            <ng-icon
+              aria-hidden="true"
+              name="lucidePlus"
+            />
+            Ajouter une catégorie
+          </button>
+        } @else {
+          <div
+            class="px-4 py-2 bg-bg-surface border border-primary-border rounded-md"
+          >
+            <app-category-input
+              variant="category"
+              (finish)="onCategoryCreate($event)"
+            />
+          </div>
+        }
+      </div>
+    </section>
+  }
+</main>

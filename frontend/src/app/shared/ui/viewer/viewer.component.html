@@ -1,0 +1,20 @@
+<div
+  class="inline-flex items-start justify-between w-full text-sm overflow-hidden"
+>
+  @if (viewer(); as view) {
+    <tiptap-editor
+      class="block pl-0.5 break-all"
+      [class]="view_class()"
+      [editor]="view"
+    />
+  }
+  <button
+    class="flex items-center p-1 hover:bg-border-strong rounded-md cursor-pointer"
+    [cdkCopyToClipboard]="viewer().getText()"
+    (cdkCopyToClipboardCopied)="onCopied($event)"
+  >
+    <ng-icon
+      [name]="is_copied() ? 'lucideCheck' : 'lucideCopy'"
+    />
+  </button>
+</div>

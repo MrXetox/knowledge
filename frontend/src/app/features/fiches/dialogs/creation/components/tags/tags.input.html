@@ -1,0 +1,31 @@
+<div
+  class="flex flex-wrap items-center gap-1.5 w-full px-3.5 py-2.5 bg-bg-inset border border-border-default rounded-md"
+  [class.border-border-default]="!touched() || !invalid()"
+  [class.border-danger-base]="touched() && invalid()"
+>
+  @for (tag of value(); track $index; let i = $index) {
+    <span
+      class="px-2 py-1 bg-bg-muted border border-border-default text-[11px] font-medium text-text-subtle rounded-md"
+    >
+      {{ tag }}
+      <button
+        class="text-sm leading-none cursor-pointer"
+        type="button"
+        (click)="removeTag(i)"
+      >
+        ×
+      </button>
+    </span>
+  }
+  <input
+    class="flex-1 min-w-30 px-1 bg-transparent text-sm outline-none"
+    [placeholder]="value().length === 0 ? 'VPN, FortiClient, FortiVPN...' : ''"
+    (keydown)="onKeydown($event)"
+    (paste)="onPaste($event)"
+  />
+</div>
+<span
+  class="pt-1 text-[11px] text-text-ghost"
+>
+  Séparer les mots-clés par des virgules.
+</span>

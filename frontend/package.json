@@ -1,0 +1,52 @@
+{
+  "name": "knowledge",
+  "version": "1.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "packageManager": "npm@11.16.0",
+  "dependencies": {
+    "@angular/aria": "^22.0.2",
+    "@angular/cdk": "^22.0.2",
+    "@angular/common": "^22.0.2",
+    "@angular/compiler": "^22.0.2",
+    "@angular/core": "^22.0.2",
+    "@angular/forms": "^22.0.2",
+    "@angular/platform-browser": "^22.0.2",
+    "@angular/router": "^22.0.2",
+    "@azure/msal-angular": "^5.3.1",
+    "@azure/msal-browser": "^5.16.0",
+    "@ng-icons/core": "^33.2.4",
+    "@ng-icons/lucide": "^33.2.4",
+    "@tailwindcss/postcss": "^4.3.1",
+    "@tiptap/core": "^3.26.1",
+    "@tiptap/extension-code-block-lowlight": "^3.26.1",
+    "@tiptap/extension-placeholder": "^3.26.1",
+    "@tiptap/starter-kit": "^3.26.1",
+    "diff": "^9.0.0",
+    "fflate": "^0.8.3",
+    "htmldiff-js": "^1.0.5",
+    "lowlight": "^3.3.0",
+    "ngx-tiptap": "^14.0.1",
+    "postcss": "^8.5.15",
+    "rxjs": "~7.8.2",
+    "tailwindcss": "^4.3.1",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.0.4",
+    "@angular/cli": "^22.0.4",
+    "@angular/compiler-cli": "^22.0.2",
+    "@tailwindcss/typography": "^0.5.20",
+    "@types/highlight.js": "^9.12.4",
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.4",
+    "typescript": "~6.0.3",
+    "vitest": "^4.0.18"
+  }
+}

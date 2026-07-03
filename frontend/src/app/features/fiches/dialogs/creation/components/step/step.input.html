@@ -1,0 +1,36 @@
+<div
+  class="flex flex-col gap-1.5"
+>
+  <input
+    class="w-full px-3 py-2.25 bg-bg-inset border text-sm rounded-md"
+    [class.border-border-default]="!touched() || !invalid()"
+    [class.border-danger-base]="touched() && invalid()"
+    [placeholder]="placeholder()"
+    [formField]="form.text"
+    (paste)="onImagePaste($event)"
+  />
+  @if (form.image) {
+    <div
+      class="relative mt-3"
+    >
+      <app-image
+        [src]="form.image().value()"
+        [alt]="placeholder()"
+      />
+      <button
+        type="button"
+        class="absolute top-0 right-0 -translate-y-1/2 w-8 h-8 bg-danger-base text-white rounded-full cursor-pointer z-10"
+        (click)="onImageDelete()"
+      >
+        ×
+      </button>
+    </div>
+  } @else {
+    <app-filedropzone-input
+      accept="image/png, image/jpeg"
+      class="bg-bg-surface border-border-strong text-text-subtle"
+      placeholder="Glissez-déposez ou cliquer pour ajouter un screenshot"
+      (files)="processImage($event)"
+    />
+  }
+</div>

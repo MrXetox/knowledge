@@ -1,0 +1,117 @@
+<section
+  class="bg-bg-surface border border-border-default rounded-md"
+  ngAccordionGroup
+>
+  <div
+    aria-label="{{ category().name }}"
+    class="flex items-center gap-2 p-4 bg-accent-muted border border-border-default cursor-grab active:cursor-grabbing!"
+    role="group"
+    cdkDragHandle
+    [cdkDragHandleDisabled]="is_editing()"
+  >
+    <span
+      class="flex justify-center cursor-pointer"
+      ngAccordionTrigger
+      #trigger="ngAccordionTrigger"
+      [expanded]="true"
+      [panel]="panel"
+    >
+      <ng-icon
+        aria-hidden="true"
+        [name]="trigger.expanded() ? 'lucideChevronDown' : 'lucideChevronRight'"
+      />
+    </span>
+    @if (!is_editing()) {
+      <div
+        class="flex-1 flex items-center justify-center gap-2"
+      >
+        <ng-icon
+          aria-hidden="true"
+          [name]="category().special"
+        />
+        <h2
+          class="text-sm font-semibold truncate"
+        >
+          {{ category().name }}
+        </h2>
+      </div>
+      <span
+        class="text-xs font-medium text-text-ghost"
+      >
+        {{ category().children.length }} {{ category().children.length | i18nPlural: { '=0': 'sous-catégorie', '=1': 'sous-catégorie', 'other': 'sous-catégories' } }}
+      </span>
+      <div
+        class="flex gap-2"
+      >
+        <button
+          aria-label="Créer une sous-catégorie"
+          class="flex items-center justify-center w-7 h-7 bg-primary-subtle border border-primary-border text-primary-strong rounded-md cursor-pointer"
+          (click)="onCreate()"
+        >
+          <ng-icon
+            aria-hidden="true"
+            class="text-xs"
+            name="lucidePlus"
+          />
+        </button>
+        <button
+          aria-label="Modifier la catégorie"
+          class="flex items-center justify-center w-7 h-7 bg-bg-surface border border-border-default  rounded-md cursor-pointer"
+          (click)="onEdit()"
+        >
+          <ng-icon
+            aria-hidden="true"
+            class="text-xs"
+            name="lucidePencil"
+          />
+        </button>
+        <button
+          aria-label="Supprimer la catégorie"
+          class="flex items-center justify-center w-7 h-7 bg-danger-subtle border border-danger-border text-danger-strong rounded-md cursor-pointer"
+          (click)="onDelete()"
+        >
+          <ng-icon
+            aria-hidden="true"
+            class="text-xs"
+            name="lucideTrash2"
+          />
+        </button>
+      </div>
+    } @else {
+      <app-category-input
+        class="w-full"
+        variant="category"
+        [category]="category()"
+        (finish)="onEdited($event)"
+      />
+    }
+  </div>
+  <div
+    class="flex flex-col py-2"
+    cdkDropList
+    ngAccordionPanel
+    #panel="ngAccordionPanel"
+    (cdkDropListDropped)="onSubcategoryDrop($event)"
+  >
+    <ng-template ngAccordionContent>
+      @for (subcategory of category().children; track subcategory.id) {
+        <app-subcategory
+          cdkDrag
+          [cdkDragData]="subcategory"
+          [subcategory]="subcategory"
+        />
+      }
+      @if (is_creating()) {
+        <div
+          class="flex items-center pl-11 pr-4"
+        >
+          <app-category-input
+            class="w-full"
+            variant="subcategory"
+            (finish)="onCreated($event)"
+          />
+        </div>
+      }
+    </ng-template>
+  </div>
+</section>
