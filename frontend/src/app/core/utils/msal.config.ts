@@ -42,10 +42,18 @@ export const msal_providers = environment.dev_mode ? [] : [
   provideAppInitializer(async () => {
     const msal_service = inject(MsalService);
     await msal_service.instance.initialize();
-    await msal_service.instance.handleRedirectPromise();
-    const accounts = msal_service.instance.getAllAccounts();
-    if (accounts.length > 0) {
-      msal_service.instance.setActiveAccount(accounts[0]);
+
+    try {
+      const result = await msal_service.instance.handleRedirectPromise();
+
+      if (result?.account) {
+        msal_service.instance.setActiveAccount(result.account);
+      } else if (!msal_service.instance.getActiveAccount()) {
+        const accounts = msal_service.instance.getAllAccounts();
+        if (accounts.length > 0) msal_service.instance.setActiveAccount(accounts[0]);
+      }
+    } catch (error) {
+      console.error('[MSAL] Erreur au traitement de la redirection', error);
     }
   }),
   {

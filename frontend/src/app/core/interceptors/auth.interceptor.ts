@@ -3,6 +3,8 @@ import { inject } from "@angular/core";
 import { MsalService } from "@azure/msal-angular";
 
 import { environment } from "../../../environments/environment";
+import { catchError, EMPTY, from, switchMap, throwError } from 'rxjs';
+import { CacheLookupPolicy, InteractionRequiredAuthError } from '@azure/msal-browser';
 
 /**
  * Interceptor HTTP qui ajoute un header Authorization Bearer with idToken
@@ -20,11 +22,28 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const msal = inject(MsalService);
   const account = msal.instance.getActiveAccount() ?? msal.instance.getAllAccounts()[0];
+  if (!account) return next(req);
 
-  if (!account?.idToken) return next(req);
-
-  const cloned = req.clone({
-    setHeaders: { Authorization: `Bearer ${account.idToken}` }
-  });
-  return next(cloned);
+  return from(
+    msal.acquireTokenSilent({
+      account,
+      scopes: ['openid', 'profile'],
+      cacheLookupPolicy: CacheLookupPolicy.AccessTokenAndRefreshToken,
+    }),
+  ).pipe(
+    catchError((error) => {
+      if (error instanceof InteractionRequiredAuthError) {
+        msal.acquireTokenRedirect({ account, scopes: ['openid', 'profile'] });
+        return EMPTY;
+      }
+      return throwError(() => error);
+    }),
+    switchMap((result) =>
+      next(
+        req.clone({
+          setHeaders: { Authorization: `Bearer ${result.idToken}` },
+        }),
+      ),
+    ),
+  );
 };

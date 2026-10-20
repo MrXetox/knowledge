@@ -69,7 +69,7 @@ The application is designed to be hosted on isolated production servers (e.g., R
 Ensure PostgreSQL is running. Initialize the database schema and apply all versioned updates using Doctrine Migrations:
 
 ```bash
-backend/vendor/bin/doctrine-migrations migrate
+cd backend && vendor/bin/doctrine-migrations migrate
 ```
 
 ### Step 3: Client Build
